@@ -7,7 +7,7 @@ import com.blockchain.poe.config.BlockchainConfig;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
- * Starts WebService and initializes SpringBoot framework.
+ * Starts Blockchain with API's using Spring boot.
  *
  * @author Ahmet Can EROL
  *

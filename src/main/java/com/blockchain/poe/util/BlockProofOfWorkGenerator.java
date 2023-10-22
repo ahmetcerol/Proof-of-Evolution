@@ -18,7 +18,7 @@ import com.google.common.hash.Hashing;
  */
 
 public class BlockProofOfWorkGenerator {
-    /*
+    /**
       Simple Proof of Work Algorithm:
 
       - Find a number p` such that hash(pp`) contains leading 6 zeroes, where p
