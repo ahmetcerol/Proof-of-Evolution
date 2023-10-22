@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.blockchain.poe.util.AntColonyProofOfEvolutionGenerator;
 import com.blockchain.poe.util.BlockProofOfEvolutionGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,6 +89,30 @@ public class BlockchainController {
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
         // (3) - Forge the new Block by adding it to the chain
+        Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
+                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
+                .previousHsh(newBlock.getPreviousHash()).build();
+    }
+
+    @GetMapping("/acoMine")
+    public MineResponse acoMine() throws JsonProcessingException {
+        Block lastBlock = blockChain.lastBlock();
+        Long previousProof = lastBlock.getProof();
+
+        String proofString = AntColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
+        Long proof = null;
+        try {
+            proof = Long.parseLong(proofString);
+        } catch (NumberFormatException e) {
+            proof = generateRandomLong();
+        }
+// Dönüş değerini Long'a çevirin
+
+
+        blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
+
         Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
 
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
