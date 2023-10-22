@@ -1,10 +1,12 @@
 package com.blockchain.poe.api;
 
 import java.math.BigDecimal;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.blockchain.poe.util.BlockProofOfEvolutionGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +43,35 @@ public class BlockchainController {
     public static final String NODE_ID = UUID.randomUUID().toString().replace("-", "");
     public static final String NODE_ACCOUNT_ADDRESS = "0";
     public static final BigDecimal MINING_CASH_AWARD = BigDecimal.ONE;
+    @GetMapping("/poeMine")
+    public MineResponse poeMine() throws JsonProcessingException {
+        Block lastBlock = blockChain.lastBlock();
+        Long previousProof = lastBlock.getProof();
+
+        String proofString = BlockProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
+        Long proof = null;
+        try {
+            proof = Long.parseLong(proofString);
+        } catch (NumberFormatException e) {
+            // Geçersiz diziyi ele almak için bir işlem yapabilirsiniz.
+            // Örneğin, rastgele bir sayı oluşturabilir veya başka bir işlem yapabilirsiniz.
+            proof = generateRandomLong(); // Rasgele bir Long üretildiğini varsayalım.
+        }
+// Dönüş değerini Long'a çevirin
+
+
+        blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
+
+        Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
+                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
+                .previousHsh(newBlock.getPreviousHash()).build();
+    }private Long generateRandomLong() {
+        Random random = new Random();
+        return random.nextLong();
+    }
+
 
     @GetMapping("/mine")
     public MineResponse mine() throws JsonProcessingException {
@@ -76,4 +107,5 @@ public class BlockchainController {
 
         return TransactionResponse.builder().index(index).build();
     }
+
 }

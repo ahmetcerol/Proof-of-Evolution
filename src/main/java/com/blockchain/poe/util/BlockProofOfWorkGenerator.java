@@ -30,7 +30,7 @@ public class BlockProofOfWorkGenerator {
       hash with 6 leading 0s is produced.
      */
 
-    public static String PROOF_OF_WORK ="00000000";
+    public static String PROOF_OF_WORK ="00000";
     public static Long proofOfWork(Long lastProof) {
         Long proof = 0L;
         while (validProof(lastProof, proof) != true) {
