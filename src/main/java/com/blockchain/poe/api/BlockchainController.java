@@ -45,36 +45,31 @@ public class BlockchainController {
     public static final String NODE_ID = UUID.randomUUID().toString().replace("-", "");
     public static final String NODE_ACCOUNT_ADDRESS = "0";
     public static final BigDecimal MINING_CASH_AWARD = BigDecimal.ONE;
+
+    /*This API enables us to mine using a genetic algorithm, and you can access it by using 'http://localhost:8080/blockchain/poeMine'.*/
     @GetMapping("/poeMine")
     public MineResponse poeMine() throws JsonProcessingException {
+        // (1) - Calculate the Proof of Evolation with Genethic Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
 
-        String proofString = BlockProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
-        Long proof = null;
-        try {
-            proof = Long.parseLong(proofString);
-        } catch (NumberFormatException e) {
-            // Geçersiz diziyi ele almak için bir işlem yapabilirsiniz.
-            // Örneğin, rastgele bir sayı oluşturabilir veya başka bir işlem yapabilirsiniz.
-            proof = generateRandomLong(); // Rasgele bir Long üretildiğini varsayalım.
-        }
-// Dönüş değerini Long'a çevirin
+        Long proofString = BlockProofOfEvolutionGenerator.proofOfEvolution(previousProof);
+        //System.out.println(proofString); (Used for control)
 
-
+        // (2) - Reward the miner (us) by adding a transaction granting us 1
+        // coin
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
-        Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+        // (3) - Forge the new Block by adding it to the chain
+        Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
                 .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
                 .previousHsh(newBlock.getPreviousHash()).build();
-    }private Long generateRandomLong() {
-        Random random = new Random();
-        return random.nextLong();
     }
 
 
+    /*This API enables us to mine using a Proof of Work , and you can access it by using 'http://localhost:8080/blockchain/mine'.*/
     @GetMapping("/mine")
     public MineResponse mine() throws JsonProcessingException {
 
@@ -102,19 +97,11 @@ public class BlockchainController {
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
 
-        String proofString = AntColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
-        Long proof = null;
-        try {
-            proof = Long.parseLong(proofString);
-        } catch (NumberFormatException e) {
-            proof = generateRandomLong();
-        }
-// Dönüş değerini Long'a çevirin
-
-
+        Long proofString = AntColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof);
+        System.out.println(proofString);
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
-        Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+        Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
                 .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
@@ -128,12 +115,6 @@ public class BlockchainController {
 
         String proofString = ArtificialBeeColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
         Long proof = null;
-        try {
-            proof = Long.parseLong(proofString);
-        } catch (NumberFormatException e) {
-            proof = generateRandomLong();
-        }
-// Dönüş değerini Long'a çevirin
 
 
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
@@ -146,11 +127,13 @@ public class BlockchainController {
     }
 
 
+    /*This API enables us to see chain of blockchain , and you can access it by using 'http://localhost:8080/blockchain/chain'.*/
     @GetMapping("/chain")
     public ChainResponse fullChain() throws JsonProcessingException {
         return ChainResponse.builder().chain(blockChain.getChain()).length(blockChain.getChain().size()).build();
     }
 
+    /*This API enables us to add transaction of blockchain , and you can access it by using 'http://localhost:8080/blockchain/transactions'.*/
     @PostMapping("/transactions")
     public TransactionResponse newTransaction(@RequestBody @Valid Transaction trans) throws JsonProcessingException {
 
