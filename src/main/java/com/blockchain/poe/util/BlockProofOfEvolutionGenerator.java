@@ -27,7 +27,7 @@ import java.util.Random;
  */
 public class BlockProofOfEvolutionGenerator {
     private static final int PROOF_LENGTH = 8; // The length of the proof
-    private static final int TARGET_ZEROS = 4; // The number of leading zeros for a valid proof
+    private static final int TARGET_ZEROS = 5; // The number of leading zeros for a valid proof
     private static final int POPULATION_SIZE = 20; // The size of the population for the genethic algorithm
     private static final double MUTATION_RATE = 0.2; // The previous proof used as a basis for the new proof
     private static Long previousProof;

@@ -6,9 +6,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.blockchain.poe.util.AntColonyProofOfEvolutionGenerator;
-import com.blockchain.poe.util.BlockProofOfEvolutionGenerator;
-import com.blockchain.poe.util.ArtificialBeeColonyProofOfEvolutionGenerator;
+import com.blockchain.poe.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +22,6 @@ import com.blockchain.poe.model.ChainResponse;
 import com.blockchain.poe.model.MineResponse;
 import com.blockchain.poe.model.TransactionResponse;
 import com.blockchain.poe.service.Blockchain;
-import com.blockchain.poe.util.BlockProofOfWorkGenerator;
 
 /**
  * Exposes Basic Blockchain related APIs.
@@ -48,7 +45,8 @@ public class BlockchainController {
 
     /*This API enables us to mine using a genetic algorithm, and you can access it by using 'http://localhost:8080/blockchain/poeMine'.*/
     @GetMapping("/poeMine")
-    public MineResponse poeMine() throws JsonProcessingException {
+    public MineResponse poeMine() throws Exception {
+
         // (1) - Calculate the Proof of Evolution with Genetic Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
@@ -63,12 +61,15 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
+
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
     /*This API enables us to mine using a Proof of Work , and you can access it by using 'http://localhost:8080/blockchain/mine'.*/
     @GetMapping("/mine")
-    public MineResponse mine() throws JsonProcessingException {
+    public MineResponse mine() throws Exception {
 
         // (1) - Calculate the Proof of Work
         Block lastBlock = blockChain.lastBlock();
@@ -83,6 +84,8 @@ public class BlockchainController {
 
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
 
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
