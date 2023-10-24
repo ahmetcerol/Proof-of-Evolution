@@ -31,8 +31,8 @@ public class BlockProofOfWorkGenerator {
      */
     public static String PROOF_OF_WORK ="00000";
     public static Long proofOfWork(Long lastProof) {
-        Long proof = 0L;
-        while (validProof(lastProof, proof) != true) {
+        long proof = 0L;
+        while (!validProof(lastProof, proof)) {
             proof +=1L;
         }
         return proof;
