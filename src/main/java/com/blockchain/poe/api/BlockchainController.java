@@ -30,7 +30,6 @@ import com.blockchain.poe.util.BlockProofOfWorkGenerator;
  * Exposes Basic Blockchain related APIs.
  *
  * @author Ahmet Can EROL
- *
  */
 @RestController
 @RequestMapping("/blockchain")
@@ -49,7 +48,7 @@ public class BlockchainController {
     /*This API enables us to mine using a genetic algorithm, and you can access it by using 'http://localhost:8080/blockchain/poeMine'.*/
     @GetMapping("/poeMine")
     public MineResponse poeMine() throws JsonProcessingException {
-        // (1) - Calculate the Proof of Evolation with Genethic Algorithm
+        // (1) - Calculate the Proof of Evolution with Genetic Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
 
@@ -63,11 +62,8 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
-                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
-                .previousHsh(newBlock.getPreviousHash()).build();
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
-
 
     /*This API enables us to mine using a Proof of Work , and you can access it by using 'http://localhost:8080/blockchain/mine'.*/
     @GetMapping("/mine")
@@ -87,45 +83,50 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
 
-        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
-                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
-                .previousHsh(newBlock.getPreviousHash()).build();
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
+    /*This API enables us to mine using a ant colony algorithm, and you can access it by using 'http://localhost:8080/blockchain/acoMine'.*/
     @GetMapping("/acoMine")
     public MineResponse acoMine() throws JsonProcessingException {
+        // (1) - Calculate the Proof of Evolution with Ant Colony Algorithm
+
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
 
         Long proofString = AntColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof);
-        System.out.println(proofString);
+
+        // (2) - Reward the miner (us) by adding a transaction granting us 1
+        // coin
+        //System.out.println(proofString);(used for control)
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
-                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
-                .previousHsh(newBlock.getPreviousHash()).build();
+        // (3) - Forge the new Block by adding it to the chain
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
+    /*This API enables us to mine using  artificial bee algorithm, and you can access it by using 'http://localhost:8080/blockchain/abcMine'.*/
     @GetMapping("/abcMine")
     public MineResponse abcMine() throws JsonProcessingException {
+        // (1) - Calculate the Proof of Evolution with Artificial Bee Algorithm
+
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
 
-        String proofString = ArtificialBeeColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof); // Dizeden dönüşüm
-        Long proof = null;
+        Long proofString = ArtificialBeeColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof);
 
-
+        // (2) - Reward the miner (us) by adding a transaction granting us 1
+        // coin
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
-        Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+        Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex())
-                .transactions(newBlock.getTransactions()).proof(newBlock.getProof())
-                .previousHsh(newBlock.getPreviousHash()).build();
+
+        // (3) - Forge the new Block by adding it to the chain
+        return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
-
 
     /*This API enables us to see chain of blockchain , and you can access it by using 'http://localhost:8080/blockchain/chain'.*/
     @GetMapping("/chain")

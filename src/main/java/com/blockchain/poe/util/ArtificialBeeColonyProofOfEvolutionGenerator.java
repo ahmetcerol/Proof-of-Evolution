@@ -12,14 +12,14 @@ public class ArtificialBeeColonyProofOfEvolutionGenerator {
     private static final int TARGET_ZEROS = 6; // Zorluk seviyesi
     private static final int BEE_COUNT = 20;
     private static final int ONLOOKER_BEE_COUNT = 10;
-    private static final int MAX_GENERATIONS = 1000;
-    private static String previousProof;
+    private static final int MAX_GENERATIONS = 5000;
+    private static Long previousProof;
 
-    public ArtificialBeeColonyProofOfEvolutionGenerator(String previousProof) {
+    public ArtificialBeeColonyProofOfEvolutionGenerator(Long previousProof) {
         this.previousProof = previousProof;
     }
 
-    public static String proofOfEvolution(Long previousProof) {
+    public static Long proofOfEvolution(Long previousProof) {
         List<Bee> bees = new ArrayList<>();
         for (int i = 0; i < BEE_COUNT; i++) {
             bees.add(new Bee());
@@ -73,7 +73,7 @@ public class ArtificialBeeColonyProofOfEvolutionGenerator {
     }
 
     private static class Bee {
-        private String proof;
+        private Long proof;
         private double fitness;
 
         public Bee() {
@@ -82,7 +82,7 @@ public class ArtificialBeeColonyProofOfEvolutionGenerator {
         }
 
         public void sendEmployedBee() {
-            String newProof = generateRandomProof();
+            Long newProof = generateRandomProof();
             double newFitness = ArtificialBeeColonyProofOfEvolutionGenerator.calculateFitness(newProof);
 
             if (newFitness > fitness) {
@@ -91,7 +91,7 @@ public class ArtificialBeeColonyProofOfEvolutionGenerator {
         }
 
         public void sendOnlookerBee() {
-            String newProof = generateRandomProof();
+            Long newProof = generateRandomProof();
             double newFitness = ArtificialBeeColonyProofOfEvolutionGenerator.calculateFitness(newProof);
 
             if (newFitness > fitness) {
@@ -113,23 +113,19 @@ public class ArtificialBeeColonyProofOfEvolutionGenerator {
             return fitness;
         }
 
-        public String getProof() {
+        public Long getProof() {
             return proof;
         }
     }
 
-    private static String generateRandomProof() {
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < PROOF_LENGTH; i++) {
-            char randomChar = (char) (random.nextInt(26) + 'a');
-            sb.append(randomChar);
-        }
-        return sb.toString();
+    private static Long generateRandomProof() {
+        long range = (long) Math.pow(10, PROOF_LENGTH);
+        return (long) (Math.random() * range);
     }
 
-    private static double calculateFitness(String proof) {
-        String combinedProof = previousProof + proof;
+
+    private static double calculateFitness(Long proof) {
+        String combinedProof = String.valueOf(previousProof) + String.valueOf(proof);
         String sha256 = Hashing.sha256().hashString(combinedProof, StandardCharsets.UTF_8).toString();
         int leadingZeroCount = 0;
         while (leadingZeroCount < sha256.length() && sha256.charAt(leadingZeroCount) == '0') {
