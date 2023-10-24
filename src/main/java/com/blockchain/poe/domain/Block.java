@@ -1,4 +1,5 @@
 package com.blockchain.poe.domain;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -23,7 +24,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-
 /*
  * Hash should be calculated on the ordered list of attributes and hence keeping
  * them sorted to ensure that hashing is consistent.
@@ -33,19 +33,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Block {
     private Long index;
-
     private Long timestamp;
-
     private List<Transaction> transactions;
-
     private Long proof;
-
     // hash of the previous Block
     private String previousHash;
-
     public static final Long GENESIS_BLOCK_PROOF = 100L;
     public static final String GENESIS_BLOCK_PREV_HASH = "1";
-
     public String hash(ObjectMapper mapper) throws JsonProcessingException {
         String json = mapper.writeValueAsString(this);
         return Hashing.sha256().hashString(json, StandardCharsets.UTF_8).toString();

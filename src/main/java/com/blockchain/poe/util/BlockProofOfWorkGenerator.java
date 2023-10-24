@@ -29,7 +29,6 @@ public class BlockProofOfWorkGenerator {
       Find a number p that when hashed with the previous block’s solution a
       hash with 6 leading 0s is produced.
      */
-
     public static String PROOF_OF_WORK ="00000";
     public static Long proofOfWork(Long lastProof) {
         Long proof = 0L;
@@ -38,13 +37,8 @@ public class BlockProofOfWorkGenerator {
         }
         return proof;
     }
-
     public static boolean validProof(Long lastProof, Long proof) {
         String s = ""+lastProof+""+proof;
         String sha256 = Hashing.sha256().hashString(s,StandardCharsets.UTF_8).toString();
-        return sha256.endsWith(PROOF_OF_WORK);
-    }
-
-
-
+        return sha256.endsWith(PROOF_OF_WORK);}
 }

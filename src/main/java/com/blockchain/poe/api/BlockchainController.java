@@ -28,6 +28,7 @@ import com.blockchain.poe.util.BlockProofOfWorkGenerator;
 
 /**
  * Exposes Basic Blockchain related APIs.
+ * You can access all API's with : <a href="http://localhost:8080/blockchain/">API'S url</a>
  *
  * @author Ahmet Can EROL
  */

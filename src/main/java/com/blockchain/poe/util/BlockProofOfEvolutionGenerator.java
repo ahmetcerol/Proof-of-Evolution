@@ -35,7 +35,6 @@ public class BlockProofOfEvolutionGenerator {
     public BlockProofOfEvolutionGenerator(Long previousProof) {
         this.previousProof = previousProof;
     }
-
     public static Long proofOfEvolution(Long previousProof) {
         List<Long> population = generateInitialPopulation();
         int generation = 0;
@@ -62,22 +61,18 @@ public class BlockProofOfEvolutionGenerator {
             generation++;
         }
     }
-
     // Check if the proof is valid by ensuring it has the required leading zeros
-
     private static boolean isProofValid(Long previousProof, Long currentProof) {
         String combinedProof = String.valueOf(previousProof) + String.valueOf(currentProof);
         String sha256 = Hashing.sha256().hashString(combinedProof, StandardCharsets.UTF_8).toString();
         return sha256.startsWith("0".repeat(TARGET_ZEROS));
     }
-
     // Generate a random long number
     private static long generateRandomLong() {
         Random random = new Random();
         long range = (long) Math.pow(10, PROOF_LENGTH);
         return random.nextLong() % range;
     }
-
     // Initialize the initial population with random proofs
     private static List<Long> generateInitialPopulation() {
         List<Long> population = new ArrayList<>();
@@ -86,23 +81,16 @@ public class BlockProofOfEvolutionGenerator {
         }
         return population;
     }
-
     // Select the best individual based on their fitness
-
     private static List<Long> selectBestIndividuals(List<Long> population) {
         Long bestIndividual = Collections.max(population, (p1, p2) -> Double.compare(calculateFitness(p1), calculateFitness(p2)));
         return List.of(bestIndividual);
     }
-
-
     // Select a random parent from the population
-
     private static Long selectRandomParent(List<Long> population) {
         return population.get(new Random().nextInt(population.size()));
     }
-
     // Select a random parent from the population
-
     private static Long crossover(Long parent1, Long parent2) {
         String parent1Str = String.valueOf(parent1);
         String parent2Str = String.valueOf(parent2);
@@ -110,9 +98,7 @@ public class BlockProofOfEvolutionGenerator {
         String childStr = parent1Str.substring(0, crossoverPoint) + parent2Str.substring(crossoverPoint);
         return Long.parseLong(childStr);
     }
-
     // Mutate a child by changing a digit with a certain probability
-
     private static Long mutate(Long child) {
         Long mutatedChild = child;
         for (int i = 0; i < PROOF_LENGTH; i++) {
@@ -123,16 +109,13 @@ public class BlockProofOfEvolutionGenerator {
         }
         return mutatedChild;
     }
-
     // Mutate a child by changing a digit with a certain probability
-
     private static Long mutateDigit(Long value, int position, int newDigit) {
         long factor = (long) Math.pow(10, position);
         long oldValue = (value / factor) % 10;
         long difference = newDigit - oldValue;
         return value + (difference * factor);
     }
-
     // Calculate the fitness of a proof based on the number of leading zeros
     private static double calculateFitness(Long proof) {
         String combinedProof = String.valueOf(previousProof) + String.valueOf(proof);

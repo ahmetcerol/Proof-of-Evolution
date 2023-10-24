@@ -27,10 +27,8 @@ import lombok.NoArgsConstructor;
 public class Transaction {
     @NotEmpty
     private String sender;
-
     @NotEmpty
     private String recipient;
-
     @NotNull
     private BigDecimal amount;
 }

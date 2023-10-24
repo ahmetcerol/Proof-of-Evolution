@@ -24,53 +24,41 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Data
+/*`@Slf4j` is an annotation used in Java-based applications for logging.
+ It simplifies logging by creating a log variable within a class, allowing messages to be logged at
+ different levels (such as debug, info, warn, error, etc.). This facilitates debugging and monitoring
+ of the application.*/
 @Slf4j
 @Service
 public class Blockchain {
-
     private List<Block> chain;
     private List<Transaction> currentTransactions;
-
     @Autowired
     private ObjectMapper mapper;
-
     public Blockchain() throws JsonProcessingException {
-
         chain = new ArrayList<>();
         currentTransactions = new ArrayList<>();
-
         // Create the genesis block
         createBlock(Block.GENESIS_BLOCK_PROOF, Block.GENESIS_BLOCK_PREV_HASH);
     }
-
     public Long addTransaction(String sender, String recipient, BigDecimal amount) {
-
         Transaction transaction = Transaction.builder().sender(sender).recipient(recipient).amount(amount).build();
-
         currentTransactions.add(transaction);
-
         return lastBlock().getIndex() + 1L;
     }
-
     public Block createBlock(Long proof, String previusHash) throws JsonProcessingException {
-
         Block block = Block.builder().index(chain.size() + 1L)
                 .previousHash((previusHash != null) ? previusHash : lastBlock().hash(mapper)).proof(proof)
                 .timestamp(new Date().getTime()).transactions(currentTransactions).build();
-
         // add new block to the chain.
         this.chain.add(block);
-
         // start accepting new transactions.
         this.currentTransactions = new ArrayList<>();
-
         return block;
     }
-
     public Block lastBlock() {
         return chain.get(this.chain.size() - 1);
     }
-
     public static boolean validChain(List<Block> chain, ObjectMapper mapper) throws JsonProcessingException {
 
         if (chain == null || chain.isEmpty())
@@ -98,7 +86,6 @@ public class Blockchain {
 
         return true;
     }
-
     public boolean validChain() throws JsonProcessingException {
         return validChain(chain, mapper);
     }
