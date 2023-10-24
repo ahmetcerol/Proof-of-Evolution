@@ -10,8 +10,8 @@ import java.util.Random;
 
 public class AntColonyProofOfEvolutionGenerator {
     private static final int PROOF_LENGTH = 8;
-    private static final int TARGET_ZEROS = 6; // Zorluk seviyesi
-    private static final int ANT_COUNT = 20;
+    private static final int TARGET_ZEROS = 4; // Zorluk seviyesi
+    private static final int ANT_COUNT = 50;
     private static final double EVAPORATION_RATE = 0.2;
     private static Long previousProof;
 
@@ -26,7 +26,7 @@ public class AntColonyProofOfEvolutionGenerator {
         }
 
         Ant bestAnt = null;
-        int maxGenerations = 1000;
+        int maxGenerations = 5000;
         int generation = 0;
 
         while (generation < maxGenerations) {
@@ -63,7 +63,7 @@ public class AntColonyProofOfEvolutionGenerator {
 
         public Ant() {
             proof = generateRandomProof();
-            pheromoneLevel = 1.0;
+            pheromoneLevel = 10.0;
         }
 
         public void generateProof() {
@@ -90,10 +90,10 @@ public class AntColonyProofOfEvolutionGenerator {
     }
 
     private static Long generateRandomProof() {
-        Random random = new Random();
         long range = (long) Math.pow(10, PROOF_LENGTH);
-        return random.nextLong() % range;
+        return (long) (Math.random() * range);
     }
+
 
     private static double calculateFitness(Long proof) {
         String combinedProof = String.valueOf(previousProof) + String.valueOf(proof);
