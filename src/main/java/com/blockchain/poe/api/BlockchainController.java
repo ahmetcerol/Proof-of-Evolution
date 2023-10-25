@@ -69,7 +69,7 @@ public class BlockchainController {
 
         // Stop time and return execution time.
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.println("Time taken for mining is  (Genetic Algorithm):" + executionTime);
+        System.out.println("Time taken for mining is  (Genetic Algorithm):" + executionTime +" seconds");
 
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
@@ -100,7 +100,7 @@ public class BlockchainController {
 
         // Stop time and return executionTime
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.println("Time taken for mining is : (Proof of Work)" + executionTime);
+        System.out.println("Time taken for mining is : (Proof of Work)" + executionTime +" seconds");
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
 
@@ -130,7 +130,7 @@ public class BlockchainController {
 
         // Stop time and return execution time
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.println("Time taken for mining is : (Ant Colony Optimization)" + executionTime);
+        System.out.println("Time taken for mining is : (Ant Colony Optimization)" + executionTime +" seconds");
 
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
@@ -163,7 +163,7 @@ public class BlockchainController {
 
         //Stop time and return execution time
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.println("Time taken for calculation is : (Artificial Bee Colony Optimization)" + executionTime);
+        System.out.println("Time taken for calculation is : (Artificial Bee Colony Optimization)" + executionTime +" seconds");
 
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
