@@ -47,6 +47,9 @@ public class BlockchainController {
     @GetMapping("/poeMine")
     public MineResponse poeMine() throws Exception {
 
+        // Start time
+        long startTime = (System.currentTimeMillis());
+
         // (1) - Calculate the Proof of Evolution with Genetic Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
@@ -64,6 +67,10 @@ public class BlockchainController {
         double cpuUsage = cpuUsages.getProcessCpuLoad();
         System.out.println(cpuUsage);
 
+        // Stop time and return execution time.
+        long executionTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Time taken for mining is  (Genetic Algorithm):" + executionTime);
+
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
@@ -71,6 +78,8 @@ public class BlockchainController {
     @GetMapping("/mine")
     public MineResponse mine() throws Exception {
 
+        // Start time
+        long startTime = (System.currentTimeMillis());
         // (1) - Calculate the Proof of Work
         Block lastBlock = blockChain.lastBlock();
 
@@ -89,20 +98,24 @@ public class BlockchainController {
         double cpuUsage = cpuUsages.getProcessCpuLoad();
         System.out.println(cpuUsage);
 
+        // Stop time and return executionTime
+        long executionTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Time taken for mining is : (Proof of Work)" + executionTime);
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
+
     }
 
     /*This API enables us to mine using a ant colony algorithm, and you can access it by using 'http://localhost:8080/blockchain/acoMine'.*/
     @GetMapping("/acoMine")
     public MineResponse acoMine() throws Exception {
-        // (1) - Calculate the Proof of Evolution with Ant Colony Algorithm
 
+        // Start time
+        long startTime = (System.currentTimeMillis());
+        // (1) - Calculate the Proof of Evolution with Ant Colony Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
-
         Long proofString = AntColonyProofOfEvolutionGenerator.proofOfEvolution(previousProof);
-
         // (2) - Reward the miner (us) by adding a transaction granting us 1
         // coin
         //System.out.println(proofString);(used for control)
@@ -115,6 +128,10 @@ public class BlockchainController {
         double cpuUsage = cpuUsages.getProcessCpuLoad();
         System.out.println(cpuUsage);
 
+        // Stop time and return execution time
+        long executionTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Time taken for mining is : (Ant Colony Optimization)" + executionTime);
+
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
@@ -122,6 +139,9 @@ public class BlockchainController {
     /*This API enables us to mine using  artificial bee algorithm, and you can access it by using 'http://localhost:8080/blockchain/abcMine'.*/
     @GetMapping("/abcMine")
     public MineResponse abcMine() throws Exception {
+
+        // Start time
+        long startTime = (System.currentTimeMillis());
         // (1) - Calculate the Proof of Evolution with Artificial Bee Algorithm
 
         Block lastBlock = blockChain.lastBlock();
@@ -140,6 +160,10 @@ public class BlockchainController {
         // (4) - Measure CPU usage
         double cpuUsage = cpuUsages.getProcessCpuLoad();
         System.out.println(cpuUsage);
+
+        //Stop time and return execution time
+        long executionTime = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println("Time taken for calculation is : (Artificial Bee Colony Optimization)" + executionTime);
 
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
