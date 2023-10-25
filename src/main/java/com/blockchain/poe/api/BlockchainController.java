@@ -84,15 +84,18 @@ public class BlockchainController {
 
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
+
+        // (4) - Measure CPU usage
         double cpuUsage = cpuUsages.getProcessCpuLoad();
         System.out.println(cpuUsage);
 
+        // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
     /*This API enables us to mine using a ant colony algorithm, and you can access it by using 'http://localhost:8080/blockchain/acoMine'.*/
     @GetMapping("/acoMine")
-    public MineResponse acoMine() throws JsonProcessingException {
+    public MineResponse acoMine() throws Exception {
         // (1) - Calculate the Proof of Evolution with Ant Colony Algorithm
 
         Block lastBlock = blockChain.lastBlock();
@@ -105,15 +108,20 @@ public class BlockchainController {
         //System.out.println(proofString);(used for control)
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
+        // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        // (3) - Forge the new Block by adding it to the chain
+        // (4) - Measure CPU usage
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
+
+        // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
     /*This API enables us to mine using  artificial bee algorithm, and you can access it by using 'http://localhost:8080/blockchain/abcMine'.*/
     @GetMapping("/abcMine")
-    public MineResponse abcMine() throws JsonProcessingException {
+    public MineResponse abcMine() throws Exception {
         // (1) - Calculate the Proof of Evolution with Artificial Bee Algorithm
 
         Block lastBlock = blockChain.lastBlock();
@@ -125,25 +133,38 @@ public class BlockchainController {
         // coin
         blockChain.addTransaction(NODE_ACCOUNT_ADDRESS, NODE_ID, MINING_CASH_AWARD);
 
+        // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
 
-        // (3) - Forge the new Block by adding it to the chain
+        // (4) - Measure CPU usage
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
+
+        // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
     /*This API enables us to see chain of blockchain , and you can access it by using 'http://localhost:8080/blockchain/chain'.*/
     @GetMapping("/chain")
-    public ChainResponse fullChain() throws JsonProcessingException {
+    public ChainResponse fullChain() throws Exception {
+
+        // - Measure CPU usage
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
         return ChainResponse.builder().chain(blockChain.getChain()).length(blockChain.getChain().size()).build();
     }
 
     /*This API enables us to add transaction of blockchain , and you can access it by using 'http://localhost:8080/blockchain/transactions'.*/
     @PostMapping("/transactions")
-    public TransactionResponse newTransaction(@RequestBody @Valid Transaction trans) throws JsonProcessingException {
+    public TransactionResponse newTransaction(@RequestBody @Valid Transaction trans) throws Exception {
 
+        // (1) - Transaction function
         Long index = blockChain.addTransaction(trans.getSender(), trans.getRecipient(), trans.getAmount());
 
+        // (2) - Measure CPU usage
+        double cpuUsage = cpuUsages.getProcessCpuLoad();
+        System.out.println(cpuUsage);
         return TransactionResponse.builder().index(index).build();
     }
 
