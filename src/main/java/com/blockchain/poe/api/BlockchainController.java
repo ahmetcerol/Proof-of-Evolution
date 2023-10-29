@@ -8,11 +8,7 @@ import javax.validation.Valid;
 
 import com.blockchain.poe.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +26,7 @@ import com.blockchain.poe.service.Blockchain;
  * @author Ahmet Can EROL
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/blockchain")
 public class BlockchainController {
 
@@ -75,11 +72,12 @@ public class BlockchainController {
     }
 
     /*This API enables us to mine using a Proof of Work , and you can access it by using 'http://localhost:8080/blockchain/mine'.*/
-    @GetMapping("/mine")
+    @GetMapping("/Mine")
     public MineResponse mine() throws Exception {
 
         // Start time
         long startTime = (System.currentTimeMillis());
+
         // (1) - Calculate the Proof of Work
         Block lastBlock = blockChain.lastBlock();
 
@@ -101,6 +99,7 @@ public class BlockchainController {
         // Stop time and return executionTime
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
         System.out.println("Time taken for mining is : (Proof of Work)" + executionTime +" seconds");
+
         // (5) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
 
@@ -171,6 +170,7 @@ public class BlockchainController {
 
     /*This API enables us to see chain of blockchain , and you can access it by using 'http://localhost:8080/blockchain/chain'.*/
     @GetMapping("/chain")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ChainResponse fullChain() throws Exception {
 
         // - Measure CPU usage
@@ -181,6 +181,7 @@ public class BlockchainController {
 
     /*This API enables us to add transaction of blockchain , and you can access it by using 'http://localhost:8080/blockchain/transactions'.*/
     @PostMapping("/transactions")
+    @CrossOrigin(origins = "http://localhost:3000")
     public TransactionResponse newTransaction(@RequestBody @Valid Transaction trans) throws Exception {
 
         // (1) - Transaction function
