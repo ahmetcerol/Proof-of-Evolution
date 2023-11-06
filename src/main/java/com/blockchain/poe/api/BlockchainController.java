@@ -61,13 +61,13 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
+
 
         // Stop time and return execution time.
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
         System.out.println("Time taken for mining is  (Genetic Algorithm):" + executionTime +" seconds");
 
+        // (4) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
@@ -92,15 +92,12 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proof, lastBlock.hash(mapper));
 
-        // (4) - Measure CPU usage
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
 
         // Stop time and return executionTime
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
         System.out.println("Time taken for mining is : (Proof of Work)" + executionTime +" seconds");
 
-        // (5) - Return enameled block
+        // (4) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
 
     }
@@ -123,15 +120,12 @@ public class BlockchainController {
         // (3) - Forge the new Block by adding it to the chain
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
-        // (4) - Measure CPU usage
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
 
         // Stop time and return execution time
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
         System.out.println("Time taken for mining is : (Ant Colony Optimization)" + executionTime +" seconds");
 
-        // (5) - Return enameled block
+        // (4) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
@@ -156,15 +150,13 @@ public class BlockchainController {
         Block newBlock = blockChain.createBlock(proofString, lastBlock.hash(mapper));
 
 
-        // (4) - Measure CPU usage
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
+
 
         //Stop time and return execution time
         long executionTime = (System.currentTimeMillis() - startTime) / 1000;
         System.out.println("Time taken for calculation is : (Artificial Bee Colony Optimization)" + executionTime +" seconds");
 
-        // (5) - Return enameled block
+        // (4) - Return enameled block
         return MineResponse.builder().message("New Block Forged").index(newBlock.getIndex()).transactions(newBlock.getTransactions()).proof(newBlock.getProof()).previousHsh(newBlock.getPreviousHash()).build();
     }
 
@@ -173,9 +165,6 @@ public class BlockchainController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ChainResponse fullChain() throws Exception {
 
-        // - Measure CPU usage
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
         return ChainResponse.builder().chain(blockChain.getChain()).length(blockChain.getChain().size()).build();
     }
 
@@ -187,9 +176,7 @@ public class BlockchainController {
         // (1) - Transaction function
         Long index = blockChain.addTransaction(trans.getSender(), trans.getRecipient(), trans.getAmount());
 
-        // (2) - Measure CPU usage
-        double cpuUsage = cpuUsages.getProcessCpuLoad();
-        System.out.println(cpuUsage);
+
         return TransactionResponse.builder().index(index).build();
     }
 

@@ -29,7 +29,7 @@ public class BlockProofOfWorkGenerator {
       Find a number p that when hashed with the previous block’s solution a
       hash with 6 leading 0s is produced.
      */
-    public static String PROOF_OF_WORK ="00000";
+    public static String PROOF_OF_WORK ="000000";
     public static Long proofOfWork(Long lastProof) {
         long proof = 0L;
         while (!validProof(lastProof, proof)) {
