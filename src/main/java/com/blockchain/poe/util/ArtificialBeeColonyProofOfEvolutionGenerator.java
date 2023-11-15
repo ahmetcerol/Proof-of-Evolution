@@ -20,11 +20,11 @@ high-quality solutions in various domains.*/
  * */
 
 public class ArtificialBeeColonyProofOfEvolutionGenerator {
-    private static final int PROOF_LENGTH = 8;
-    private static final int TARGET_ZEROS = 6; // Difficulty level
-    private static final int BEE_COUNT = 20;
-    private static final int ONLOOKER_BEE_COUNT = 10;
-    private static final int MAX_GENERATIONS = 5000;
+    private static final int PROOF_LENGTH = 15;
+    private static final int TARGET_ZEROS = 12; // Difficulty level
+    private static final int BEE_COUNT = 5;
+    private static final int ONLOOKER_BEE_COUNT = 1;
+    private static final int MAX_GENERATIONS = 500;
     private static Long previousProof;
 
     // Constructor that initializes the previous proof.

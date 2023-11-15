@@ -22,8 +22,8 @@ with each other by depositing and sensing chemical pheromones on the paths they 
 
 public class AntColonyProofOfEvolutionGenerator {
     private static final int PROOF_LENGTH = 8;
-    private static final int TARGET_ZEROS = 4; // Difficulty level
-    private static final int ANT_COUNT = 50;
+    private static final int TARGET_ZEROS = 6; // Difficulty level
+    private static final int ANT_COUNT = 1000;
     private static final double EVAPORATION_RATE = 0.2;
     private static Long previousProof;
 
@@ -66,7 +66,7 @@ public class AntColonyProofOfEvolutionGenerator {
             generation++;
         }
 
-        return null;
+        return proofOfEvolution(previousProof);
     }
     // A private class representing an ant in the ant colony optimization.
     private static class Ant {
@@ -104,6 +104,8 @@ public class AntColonyProofOfEvolutionGenerator {
 
     }
     // Generate a random proof of a specified length.
+
+    // 0000 digit
     private static Long generateRandomProof() {
         long range = (long) Math.pow(10, PROOF_LENGTH);
         return (long) (Math.random() * range);
