@@ -20,11 +20,12 @@ with each other by depositing and sensing chemical pheromones on the paths they 
  * @author Ahmet Can EROL
  * */
 
-public class AntColonyProofOfEvolutionGenerator {
+/*  //ESKİ KARINCA KOLONİSİ ALGORİTMASI YAPIMIZ//
+    public class AntColonyProofOfEvolutionGenerator {
     private static final int PROOF_LENGTH = 8;
-    private static final int TARGET_ZEROS = 6; // Difficulty level
-    private static final int ANT_COUNT = 1000;
-    private static final double EVAPORATION_RATE = 0.2;
+    private static final int TARGET_ZEROS = 7; // Difficulty level
+    private static final int ANT_COUNT = 10000;
+    private static final double EVAPORATION_RATE = 0.5;
     private static Long previousProof;
 
     // Constructor that initializes the previous proof.
@@ -39,7 +40,7 @@ public class AntColonyProofOfEvolutionGenerator {
         }
 
         Ant bestAnt = null;
-        int maxGenerations = 5000;
+        int maxGenerations = 500;
         int generation = 0;
 
         while (generation < maxGenerations) {
@@ -66,7 +67,7 @@ public class AntColonyProofOfEvolutionGenerator {
             generation++;
         }
 
-        return proofOfEvolution(previousProof);
+        return null;
     }
     // A private class representing an ant in the ant colony optimization.
     private static class Ant {
@@ -77,7 +78,7 @@ public class AntColonyProofOfEvolutionGenerator {
         // Constructor for initializing an ant with a random proof and a pheromone level.
         public Ant() {
             proof = generateRandomProof();
-            pheromoneLevel = 10.0;
+            pheromoneLevel = 0.0;
         }
         // Method for the ant to generate a new proof and update it based on fitness.
         public void generateProof() {
@@ -120,4 +121,110 @@ public class AntColonyProofOfEvolutionGenerator {
         }
         return leadingZeroCount;
     }
+}*/
+public class AntColonyProofOfEvolutionGenerator {
+
+
+    private static final int PROOF_LENGTH = 15;
+    private static final int TARGET_ZEROS = 8; // Difficulty level
+    private static final int ANT_COUNT = 5;
+    private static final int MAX_GENERATIONS = 500;
+    private static Long previousProof;
+
+    public AntColonyProofOfEvolutionGenerator(Long previousProof) {
+        this.previousProof = previousProof;
+    }
+
+    public static Long proofOfEvolution(Long previousProof) {
+        List<Ant> ants = new ArrayList<>();
+        for (int i = 0; i < ANT_COUNT; i++) {
+            ants.add(new Ant());
+        }
+
+        Ant bestAnt = null;
+        int generation = 0;
+
+        while (generation < MAX_GENERATIONS) {
+            // Ant Exploration Phase
+            for (Ant ant : ants) {
+                ant.explore();}
+            // Calculate fitness values
+            for (Ant ant : ants) {
+                ant.calculateFitness();}
+            // Ant Exploitation Phase
+            for (Ant ant : ants) {
+                ant.exploit();}
+            // Calculate fitness values
+            for (Ant ant : ants) {
+                ant.calculateFitness();}
+            // Update the best ant
+            for (Ant ant : ants) {
+                if (bestAnt == null || ant.getFitness() > bestAnt.getFitness()) {
+                    bestAnt = ant;
+                }
+            }
+            if (bestAnt != null) {
+                return bestAnt.getProof();
+            }
+            generation++;
+        }
+        return null;
+    }
+
+    private static class Ant {
+        private Long proof;
+        private double fitness;
+
+        public Ant() {
+            proof = generateRandomProof();
+            fitness = 0.0;
+        }
+
+        public void explore() {
+            Long newProof = generateRandomProof();
+            double newFitness = AntColonyProofOfEvolutionGenerator.calculateFitness(newProof);
+
+            if (newFitness > fitness) {
+                proof = newProof;
+            }
+        }
+
+        public void exploit() {
+            if (fitness < TARGET_ZEROS) {
+                proof = generateRandomProof();
+            }
+        }
+
+        public void calculateFitness() {
+            fitness = AntColonyProofOfEvolutionGenerator.calculateFitness(proof);
+        }
+
+        public double getFitness() {
+            return fitness;
+        }
+
+        public Long getProof() {
+            return proof;
+        }
+    }
+
+    private static Long generateRandomProof() {
+        long range = (long) Math.pow(10, PROOF_LENGTH);
+        return (long) (Math.random() * range);
+    }
+
+    private static double calculateFitness(Long proof) {
+        String combinedProof = String.valueOf(previousProof) + String.valueOf(proof);
+
+        int leadingZeroCount = 0;
+        for (char c : combinedProof.toCharArray()) {
+            if (c == '0') {
+                leadingZeroCount++;
+            } else {
+                break;
+            }
+        }
+        return leadingZeroCount;
+    }
+
 }

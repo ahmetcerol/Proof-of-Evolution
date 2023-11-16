@@ -47,6 +47,7 @@ public class BlockchainController {
         // Start time
         long startTime = (System.currentTimeMillis());
 
+
         // (1) - Calculate the Proof of Evolution with Genetic Algorithm
         Block lastBlock = blockChain.lastBlock();
         Long previousProof = lastBlock.getProof();
